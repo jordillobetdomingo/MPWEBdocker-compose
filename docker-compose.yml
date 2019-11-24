@@ -1,0 +1,30 @@
+version: '3'
+services:
+  http:
+    build:
+      context: ./infrastructure/docker/nginx
+    env_file:
+      - ./infrastructure/environments/development.env
+    ports:
+      - "8085:80"
+    volumes:
+      - ./infrastructure/docker/http.conf:/etc/nginx/conf.d/site.conf
+      - ./src:/code
+    depends_on:
+      - php
+
+  php:
+    build:
+      context: ./infrastructure/docker/php 
+    env_file:
+      - ./infrastructure/environments/development.env
+    volumes:
+      - ./src:/code
+
+  redis:
+    build:
+      context: ./infrastructure/docker/redis    
+    env_file:
+      - ./infrastructure/environments/development.env
+    ports:
+      - "6379:6379"
